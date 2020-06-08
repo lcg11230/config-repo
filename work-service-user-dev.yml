@@ -16,4 +16,12 @@ Spring:
     hibernate:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl #避免将驼峰命名转换为下划线命名
+#注册中心
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eurekaserverA:8761/eureka/,http://eurekaserverB:8762/eureka/
+  instance:
+    prefer-ip-address: true  #使用ip注册
+    instance-id: ${spring.cloud.client.ipaddress}:${spring.application.name}:${server.port}:${zdy.version} #命名格式
 
