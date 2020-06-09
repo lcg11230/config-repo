@@ -1,0 +1,39 @@
+#端口
+server:
+  port: 8081
+
+zdy:
+  version: "@project.version@"
+
+Spring:
+  datasource: #数据源
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://rm-8vb9ojmo79c6m0jewwo.mysql.zhangbei.rds.aliyuncs.com:3306/ds_lagou?useSSL=false&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+    username: joker
+    password: lcg11230
+  jpa:        #orm
+    database: MySQL
+    show-sql: true
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl #避免将驼峰命名转换为下划线命名
+
+#注册中心
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eurekaserverA:8761/eureka/,http://eurekaserverB:8762/eureka/
+  instance:
+    prefer-ip-address: true  #使用ip注册
+    instance-id: ${spring.cloud.client.ipaddress}:${spring.application.name}:${server.port}:${zdy.version} #命名格式
+
+work-service-email:
+  ribbon:
+    #请求连接超时时间
+    ConnectTimeout: 15000
+    #请求处理超时时间
+    ReadTimeout: 15000
+    #对所有操作都进行重试
+    OkToRetryOnAllOperations: true
+    MaxAutoRetries: 0 #对当前选中实例重试次数，不包括第一次调用 MaxAutoRetriesNextServer: 0 #切换实例的重试次数
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule #负载策略调整
